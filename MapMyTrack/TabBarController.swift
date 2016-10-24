@@ -24,6 +24,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
             let nav = tabBarController.selectedViewController as! UINavigationController
             let vc = nav.topViewController as! SavedRunsViewController
             vc.passRuns(savedRuns)
+            savedRuns.removeAll()
         }
     }
     

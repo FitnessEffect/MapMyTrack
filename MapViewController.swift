@@ -44,6 +44,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         for _ in arrayOfRuns{
             _ = arrayOfRuns.popLast()
         }
+        if arrayOfRuns.count == 0{
+            runDetailOutlet.isHidden = true
+        }
     }
     
     func createPolyline(_ arrayOfPoints:[CLLocationCoordinate2D]) {

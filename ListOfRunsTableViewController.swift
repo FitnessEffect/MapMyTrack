@@ -24,12 +24,10 @@ class ListOfRunsTableViewController: UITableViewController {
         
         let cellNum = sender.tag
         
-        
         let alert = UIAlertController(title: "Edit Name", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
         alert.addTextField { (textField) in
         }
-        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
             
             let nameTextField = alert.textFields![0]
@@ -52,7 +50,6 @@ class ListOfRunsTableViewController: UITableViewController {
         
         alert.addTextField { (textField) in
         }
-        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
             
             let resultTextField = alert.textFields![0]
@@ -73,7 +70,6 @@ class ListOfRunsTableViewController: UITableViewController {
         
         alert.addTextField { (textField) in
         }
-        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
             
             let distanceTextField = alert.textFields![0]
@@ -89,12 +85,10 @@ class ListOfRunsTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return arrayOfRuns.count
     }
     
@@ -116,14 +110,13 @@ class ListOfRunsTableViewController: UITableViewController {
         return cell
     }
     
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if (editingStyle == UITableViewCellEditingStyle.delete) {
-            arrayOfRuns.remove(at: (indexPath as NSIndexPath).row)
+            arrayOfRuns.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath as IndexPath], with: .fade)
+            if arrayOfRuns.count == 0{
+                self.dismiss(animated: true, completion: nil)
+            }
             tableView.reloadData()
         }
     }
@@ -146,14 +139,6 @@ class ListOfRunsTableViewController: UITableViewController {
         if arrayOfRuns.count == 0{
             NotificationCenter.default.post(name: Notification.Name(rawValue: "savedRuns"), object: self, userInfo: [savedRunsKey:savedArrayOfRuns])
             dismiss(animated: true, completion: nil)
-        }
-    }
-    
-    // Override to support editing the table view.
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath as IndexPath], with: .fade)
         }
     }
 }

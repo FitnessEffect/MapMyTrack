@@ -20,7 +20,6 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         retrieveRuns()
-        
         self.resultSearchController = UISearchController(searchResultsController: nil)
         self.resultSearchController.searchResultsUpdater = self
         self.resultSearchController.dimsBackgroundDuringPresentation = false
@@ -59,8 +58,6 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,FileManager.SearchPathDomainMask.allDomainsMask, true)
         let path: AnyObject = paths[0] as AnyObject
         let arrPath = path.appending("/runs.plist")
-        
-        print(path)
         NSKeyedArchiver.archiveRootObject(savedRuns, toFile: arrPath)
     }
     
@@ -85,12 +82,11 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
             cell.runImageOutlet.image = filteredRuns[indexPath.row].image
             cell.runResultOutlet.text = filteredRuns[indexPath.row].result
             cell.runDistanceOutlet.text = filteredRuns[indexPath.row].distance
-            
         }else{
             cell.runNameOutlet.text = run.name
             cell.runResultOutlet.text = run.result
             cell.runImageOutlet.image = run.image
-            cell.runDistanceOutlet.text = run.distance
+            cell.runDistanceOutlet.text = run.distance + " miles"
             cell.setButtonTag(tag: indexPath.row)
         }
         return cell
@@ -112,12 +108,10 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         let cellNum = sender.tag
         
-        
         let alert = UIAlertController(title: "Edit Name", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
         alert.addTextField { (textField) in
         }
-        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
             
             let nameTextField = alert.textFields![0]
@@ -140,7 +134,6 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         alert.addTextField { (textField) in
         }
-        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
             
             let resultTextField = alert.textFields![0]
@@ -153,8 +146,6 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
             self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
-        
-        
     }
     
     @IBAction func editDistance(_ sender: UIButton) {
@@ -164,7 +155,6 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         alert.addTextField { (textField) in
         }
-        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
             
             let distanceTextField = alert.textFields![0]
@@ -178,12 +168,14 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
         }))
         self.present(alert, animated: true, completion: nil)
     }
-    
-    // Override to support editing the table view.
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
+            savedRuns.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath as IndexPath], with: .fade)
+            saveRuns()
+            tableView.reloadData()
         }
     }
 }
