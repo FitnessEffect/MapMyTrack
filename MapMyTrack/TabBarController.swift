@@ -10,11 +10,11 @@ import UIKit
 
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
-    var savedRuns = [Run]()
+    var runs = [Run]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(TabBarController.receiveRuns), name: NSNotification.Name(rawValue: "savedRuns"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(TabBarController.receiveRuns), name: NSNotification.Name(rawValue: "saveRun"), object: nil)
         self.delegate = self
     }
     
@@ -23,14 +23,14 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         if tabBar.selectedItem?.title == "Results"{
             let nav = tabBarController.selectedViewController as! UINavigationController
             let vc = nav.topViewController as! SavedRunsViewController
-            vc.passRuns(savedRuns)
-            savedRuns.removeAll()
+            vc.passRun(runs: runs)
+            runs.removeAll()
         }
     }
     
     func receiveRuns(_ notification: Notification){
-        let info:[String:[Run]] = (notification as NSNotification).userInfo as! [String:[Run]]
-        let myPassedSavedRuns = info["savedRunsKey"]
-        savedRuns = myPassedSavedRuns!
+        let info:[String:Run] = (notification as NSNotification).userInfo as! [String:Run]
+        let myPassedRun = info["savedRunKey"]
+        runs.append(myPassedRun!)
     }
 }

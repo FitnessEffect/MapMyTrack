@@ -11,13 +11,15 @@ import MapKit
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate{
     
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var recordButtonOutlet: UIButton!
+    
     let locationManager = CLLocationManager()
     let regionRadius: CLLocationDistance = 1000
     var currentLocation2D =  CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
     var currentLocation = CLLocation()
     var previousLocation = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
     var coordinateRegion:MKCoordinateRegion = MKCoordinateRegion()
-    
     var buttonPressed = true
     var run = Run()
     var count = 0
@@ -25,10 +27,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     var waitingForZoom = false
     var timer:Timer = Timer()
     var startTime:TimeInterval = TimeInterval()
-    
-    @IBOutlet weak var runDetailOutlet: UIButton!
-    @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var recordButtonOutlet: UIButton!
+    var savedRunKey:String = "savedRunKey"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,9 +43,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         for _ in arrayOfRuns{
             _ = arrayOfRuns.popLast()
         }
-        if arrayOfRuns.count == 0{
-            runDetailOutlet.isHidden = true
-        }
     }
     
     func createPolyline(_ arrayOfPoints:[CLLocationCoordinate2D]) {
@@ -56,12 +52,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         polylineRenderer.strokeColor = UIColor.red
         polylineRenderer.lineWidth = 2
         return polylineRenderer
-        
     }
     
     func getLocationUpdate(){
@@ -124,14 +118,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         MKMapView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 10, options: UIViewAnimationOptions.curveEaseIn, animations: {
             self.mapView.setRegion(coordinateRegion, animated: true)
-            }, completion: nil)
+        }, completion: nil)
     }
     
     func slowCenterMapOnLocationUsingRegion(coordinateRegion:MKCoordinateRegion){
         
         MKMapView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 10, options: UIViewAnimationOptions.curveEaseIn, animations: {
             self.mapView.setRegion(coordinateRegion, animated: true)
-            }, completion: nil)
+        }, completion: nil)
     }
     
     func updateTimer(){
@@ -177,16 +171,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
             self.locationManager.stopUpdatingLocation()
             if run.path.count > 1{
                 getPathSize()
-                
                 let total = calculateDistance()
-                
                 run.result = navigationItem.title!
                 run.name =  "Run " + String(count)
                 run.distance = String(total)
-                
-                arrayOfRuns.append(run)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "saveRun"), object: self, userInfo: [savedRunKey:run])
             }
-            runDetailOutlet.isHidden = false
             recordButtonOutlet.setTitle("Record", for: UIControlState())
             recordButtonOutlet.setTitleColor(UIColor(red: 0.0, green: 122/255, blue: 1, alpha: 1.0), for: UIControlState())
             buttonPressed = true
@@ -205,7 +195,6 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
     }
     
     func getPathSize(){
-        
         let middleIndex = run.path.count/2
         let middlePoint = run.path[middleIndex]
         
@@ -255,10 +244,5 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         
         let runningTotalMilesFormatted = String(format: "%.2f", runningTotalMiles)
         return runningTotalMilesFormatted
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let lorTB = segue.destination as! ListOfRunsTableViewController
-        lorTB.passRuns(arrayOfRuns)
     }
 }

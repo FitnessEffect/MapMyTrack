@@ -10,27 +10,29 @@ import UIKit
 
 class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate{
     
+    @IBOutlet weak var tableView: UITableView!
+    
     var savedRuns = [Run]()
     var x = 0
     var filteredRuns = [Run]()
     var resultSearchController = UISearchController()
     
-    @IBOutlet weak var tableView: UITableView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        retrieveRuns()
         self.resultSearchController = UISearchController(searchResultsController: nil)
         self.resultSearchController.searchResultsUpdater = self
         self.resultSearchController.dimsBackgroundDuringPresentation = false
         self.resultSearchController.searchBar.sizeToFit()
         self.tableView.tableHeaderView = self.resultSearchController.searchBar
-        self.tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        retrieveRuns()
         tableView.reloadData()
-        saveRuns()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        savedRuns.removeAll()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -47,9 +49,9 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
     
-    func passRuns(_ runs:[Run]){
-        for element in runs{
-            savedRuns.append(element)
+    func passRun(runs:[Run]){
+        for run in runs{
+            savedRuns.append(run)
         }
     }
     
@@ -66,17 +68,16 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,FileManager.SearchPathDomainMask.allDomainsMask, true)
         let path: AnyObject = paths[0] as AnyObject
         let arrPath = path.appending("/runs.plist")
-        
-        if let tempArr: [Run] = NSKeyedUnarchiver.unarchiveObject(withFile: arrPath) as? [Run] {
-            savedRuns = tempArr
+        if let tempRunArr: [Run] = NSKeyedUnarchiver.unarchiveObject(withFile: arrPath) as? [Run] {
+            for run in tempRunArr{
+                savedRuns.append(run)
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "runSavedCell") as! CustomSavedRunTableViewCell
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "runSavedCell") as! CustomRunTableViewCell
         let run = savedRuns[(indexPath as NSIndexPath).row]
-        
         if self.resultSearchController.isActive{
             cell.runNameOutlet.text = filteredRuns[indexPath.row].name
             cell.runImageOutlet.image = filteredRuns[indexPath.row].image
@@ -94,7 +95,6 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func updateSearchResults(for searchController: UISearchController) {
         self.filteredRuns.removeAll(keepingCapacity: false)
-        
         for element in savedRuns{
             if(element.name.lowercased().hasPrefix(searchController.searchBar.text!.lowercased()))
             {
@@ -105,23 +105,18 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func editName(_ sender: UIButton) {
-        
         let cellNum = sender.tag
-        
         let alert = UIAlertController(title: "Edit Name", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
-        alert.addTextField { (textField) in
-        }
+        alert.addTextField { (textField) in}
+        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
-            
             let nameTextField = alert.textFields![0]
             self.savedRuns[cellNum].name = nameTextField.text!
             self.saveRuns()
             self.tableView.reloadData()
         }))
-        
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {(actions) -> Void in
-            
             self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
@@ -129,13 +124,11 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func editResult(_ sender: UIButton) {
         let cellNum = sender.tag
-        
         let alert = UIAlertController(title: "Edit Time", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
-        alert.addTextField { (textField) in
-        }
+        alert.addTextField { (textField) in}
+        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
-            
             let resultTextField = alert.textFields![0]
             self.savedRuns[cellNum].result = resultTextField.text!
             self.saveRuns()
@@ -150,25 +143,22 @@ class SavedRunsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func editDistance(_ sender: UIButton) {
         let cellNum = sender.tag
-        
         let alert = UIAlertController(title: "Edit Distance", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
-        alert.addTextField { (textField) in
-        }
+        alert.addTextField { (textField) in}
+        
         alert.addAction(UIAlertAction(title: "Save", style: .destructive, handler:{ (action) -> Void in
-            
             let distanceTextField = alert.textFields![0]
             self.savedRuns[cellNum].distance = distanceTextField.text!
             self.saveRuns()
             self.tableView.reloadData()
         }))
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: {(actions) -> Void in
-            
             self.dismiss(animated: true, completion: nil)
         }))
         self.present(alert, animated: true, completion: nil)
     }
-
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source

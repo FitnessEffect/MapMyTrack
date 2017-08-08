@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		521877871D9B3B8B00A63112 /* SavedRunsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521877861D9B3B8B00A63112 /* SavedRunsViewController.swift */; };
-		521877891D9B3D8400A63112 /* CustomSavedRunTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 521877881D9B3D8400A63112 /* CustomSavedRunTableViewCell.swift */; };
-		5236CF621D9435A500327C4B /* ListOfRunsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5236CF611D9435A500327C4B /* ListOfRunsTableViewController.swift */; };
 		5236CF641D9439D400327C4B /* CustomRunTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5236CF631D9439D400327C4B /* CustomRunTableViewCell.swift */; };
 		52C602891D920C3500CA749A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52C602881D920C3500CA749A /* AppDelegate.swift */; };
 		52C6028E1D920C3500CA749A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52C6028C1D920C3500CA749A /* Main.storyboard */; };
@@ -22,8 +20,6 @@
 
 /* Begin PBXFileReference section */
 		521877861D9B3B8B00A63112 /* SavedRunsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SavedRunsViewController.swift; path = MapMyTrack/SavedRunsViewController.swift; sourceTree = "<group>"; };
-		521877881D9B3D8400A63112 /* CustomSavedRunTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomSavedRunTableViewCell.swift; path = MapMyTrack/CustomSavedRunTableViewCell.swift; sourceTree = "<group>"; };
-		5236CF611D9435A500327C4B /* ListOfRunsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListOfRunsTableViewController.swift; sourceTree = "<group>"; };
 		5236CF631D9439D400327C4B /* CustomRunTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomRunTableViewCell.swift; sourceTree = "<group>"; };
 		52C602851D920C3500CA749A /* MapMyTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapMyTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52C602881D920C3500CA749A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -50,9 +46,7 @@
 		52C6027C1D920C3500CA749A = {
 			isa = PBXGroup;
 			children = (
-				5236CF611D9435A500327C4B /* ListOfRunsTableViewController.swift */,
 				5236CF631D9439D400327C4B /* CustomRunTableViewCell.swift */,
-				521877881D9B3D8400A63112 /* CustomSavedRunTableViewCell.swift */,
 				52C6029E1D92201100CA749A /* Run.swift */,
 				52C6029A1D920DA300CA749A /* MapViewController.swift */,
 				521877861D9B3B8B00A63112 /* SavedRunsViewController.swift */,
@@ -159,9 +153,7 @@
 				52FA12911DA982520024112A /* TabBarController.swift in Sources */,
 				52C602891D920C3500CA749A /* AppDelegate.swift in Sources */,
 				521877871D9B3B8B00A63112 /* SavedRunsViewController.swift in Sources */,
-				521877891D9B3D8400A63112 /* CustomSavedRunTableViewCell.swift in Sources */,
 				52C6029F1D92201100CA749A /* Run.swift in Sources */,
-				5236CF621D9435A500327C4B /* ListOfRunsTableViewController.swift in Sources */,
 				52C6029B1D920DA300CA749A /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
