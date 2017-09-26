@@ -128,7 +128,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, MKMapViewD
         }, completion: nil)
     }
     
-    func updateTimer(){
+    @objc func updateTimer(){
         
         let currentTime = Date.timeIntervalSinceReferenceDate
         

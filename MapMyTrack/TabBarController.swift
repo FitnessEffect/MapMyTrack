@@ -28,7 +28,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         }
     }
     
-    func receiveRuns(_ notification: Notification){
+    @objc func receiveRuns(_ notification: Notification){
         let info:[String:Run] = (notification as NSNotification).userInfo as! [String:Run]
         let myPassedRun = info["savedRunKey"]
         runs.append(myPassedRun!)
